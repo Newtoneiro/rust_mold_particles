@@ -4,5 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+cuda_builder = "0.3.0"
+cuda_std = "0.2.2"
 macroquad = "0.4.13"
 rand = "0.8.5"
+
+[build-dependencies]
+cuda_builder = "0.3.0"
+
+[lib]
+name = "kernel_functions"
+path = "kernel_functions/src/lib.rs"
