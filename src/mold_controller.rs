@@ -125,6 +125,7 @@ impl MoldController {
         for idx in 0..self.particles.len() {
             self.update(idx);
         }
+        self.map.blur();
         self.map.fade();
     }
 }

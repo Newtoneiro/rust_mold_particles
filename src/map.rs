@@ -1,4 +1,4 @@
-use crate::constants::{mold_constants::FADE_FACTOR, GridType};
+use crate::constants::{mold_constants::{BLUR_WINDOW_SIZE, DELTA_TIME, FADE_FACTOR}, GridType};
 
 pub struct Map {
     width: usize,
@@ -55,12 +55,30 @@ impl Map {
         false
     }
 
-    pub fn blue(&mut self) {}
+    pub fn blur(&mut self) {
+        for y in 0..self.height {
+            for x in 0..self.width {
+                let mut sum = 0.0;
+                for offset_x in -BLUR_WINDOW_SIZE..=BLUR_WINDOW_SIZE {
+                    for offset_y in -BLUR_WINDOW_SIZE..=BLUR_WINDOW_SIZE {
+                        let offset_pos = (
+                            (x as i32 + offset_x) as usize,
+                            (y as i32 + offset_y) as usize,
+                        );
+                        if self.check_coords_in_bounds(offset_pos.0, offset_pos.1) {
+                            sum += self.get_field(offset_pos.0, offset_pos.1);
+                        }
+                    }
+                }
+                self.grid[y][x] = sum / (1.0 + 2.0 * BLUR_WINDOW_SIZE as f32).powi(2);
+            }
+        }
+    }
 
     pub fn fade(&mut self) {
         for y in 0..self.height {
             for x in 0..self.width {
-                self.grid[y][x] -= FADE_FACTOR;
+                self.grid[y][x] -= FADE_FACTOR * DELTA_TIME;
             }
         }
     }
