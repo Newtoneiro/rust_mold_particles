@@ -1,16 +1,9 @@
 # Rust Mold Particles Simulation
 
-<div style="display: flex; gap: 10px;">
-    <video width="320" height="240" controls>
-      <source src="https://github.com/user-attachments/assets/56e6cbb1-9305-4ffd-b28d-c2dc91fb5ea1" type="video/mp4">
-    </video>
-    <video width="320" height="240" controls>
-      <source src="https://github.com/user-attachments/assets/927a97fd-ab15-40dd-8b78-102875e2a3b6" type="video/mp4">
-    </video>
-    <video width="320" height="240" controls>
-      <source src="https://github.com/user-attachments/assets/2dd77e2f-6939-4e7d-93e6-f320e3666c92" type="video/mp4">
-    </video>
-</div>
+| Video 1 | Video 2 | Video 3 |
+| --- | --- | --- |
+| [![Video 1](https://github.com/user-attachments/assets/56e6cbb1-9305-4ffd-b28d-c2dc91fb5ea1)](https://github.com/user-attachments/assets/56e6cbb1-9305-4ffd-b28d-c2dc91fb5ea1) | [![Video 2](https://github.com/user-attachments/assets/927a97fd-ab15-40dd-8b78-102875e2a3b6)](https://github.com/user-attachments/assets/927a97fd-ab15-40dd-8b78-102875e2a3b6) | [![Video 3](https://github.com/user-attachments/assets/2dd77e2f-6939-4e7d-93e6-f320e3666c92)](https://github.com/user-attachments/assets/2dd77e2f-6939-4e7d-93e6-f320e3666c92) |
+
 
 This is a simple implementation of mold particles behaviour in 2d.
 
