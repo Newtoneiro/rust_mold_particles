@@ -42,7 +42,7 @@ impl GraphicController {
             &texture,
             0.0,
             0.0,
-            WHITE,
+            GREEN,
             DrawTextureParams {
                 dest_size: Some(vec2(screen_width(), screen_height())),
                 ..Default::default()

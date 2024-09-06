@@ -3,7 +3,8 @@ use std::f32::consts::PI;
 
 use crate::{
     constants::mold_constants::{
-        DELTA_TIME, MOVE_SPEED, SENSOR_ANGLE_SPACING, SENSOR_OFFSET_DST, SENSOR_SIZE, TURN_SPEED,
+        DELTA_TIME, MOVE_SPEED, SENSOR_ANGLE_SPACING, SENSOR_OFFSET_DST, SENSOR_SIZE, SPAWN_RADIUS,
+        TURN_SPEED,
     },
     map::Map,
 };
@@ -27,15 +28,24 @@ impl MoldController {
     }
 
     pub fn init_particles(&mut self, n: usize) {
+        let center = (
+            self.map.width() as f32 / 2.0,
+            self.map.height() as f32 / 2.0,
+        );
+
         for _ in 0..n {
-            let rot = thread_rng().gen_range(0.0..2.0 * PI);
+            let angle = thread_rng().gen_range(0.0..2.0 * PI);
+            let radius = thread_rng().gen_range(0.0..SPAWN_RADIUS);
+            let x = center.0 + radius * angle.cos();
+            let y = center.1 + radius * angle.sin();
+
+            let dx = center.0 - x;
+            let dy = center.1 - y;
+            let angle_to_center = dy.atan2(dx);
 
             self.particles.push(MoldParticle {
-                pos: (
-                    self.map.width() as f32 / 2.0,
-                    self.map.height() as f32 / 2.0,
-                ),
-                angle: rot,
+                pos: (x, y),
+                angle: angle_to_center,
             })
         }
     }
