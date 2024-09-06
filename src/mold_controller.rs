@@ -2,7 +2,9 @@ use rand::{thread_rng, Rng};
 use std::f32::consts::PI;
 
 use crate::{
-    constants::mold_constants::{DELTA_TIME, MOVE_SPEED, SENSOR_OFFSET_DST, SENSOR_SIZE},
+    constants::mold_constants::{
+        DELTA_TIME, MOVE_SPEED, SENSOR_ANGLE_SPACING, SENSOR_OFFSET_DST, SENSOR_SIZE, TURN_SPEED,
+    },
     map::Map,
 };
 
@@ -38,7 +40,7 @@ impl MoldController {
         }
     }
 
-    fn update(&mut self, idx: usize) {
+    fn update_movement(&mut self, idx: usize) {
         let particle: &mut MoldParticle = &mut self.particles[idx];
 
         let direction = (particle.angle.cos(), particle.angle.sin());
@@ -81,14 +83,33 @@ impl MoldController {
 
         particle.pos = new_pos;
 
-        // let weight_forward = self.sense(idx, 0.0);
-
         self.map
             .set_field(new_pos.0 as usize, new_pos.1 as usize, 1.0);
     }
 
+    fn get_angle_correction(&self, idx: usize) -> f32 {
+        let weight_forward = self.sense(idx, 0.0);
+        let weight_left = self.sense(idx, SENSOR_ANGLE_SPACING);
+        let weight_right = self.sense(idx, -SENSOR_ANGLE_SPACING);
+
+        let random_steer_strength = thread_rng().gen_range(0.0..1.0);
+
+        if weight_forward > weight_left && weight_forward > weight_right {
+            return 0.0;
+        } else if weight_forward < weight_left && weight_forward < weight_right {
+            return (random_steer_strength - 0.5) * 2.0 * TURN_SPEED * DELTA_TIME;
+        } else if weight_right > weight_left {
+            return -random_steer_strength * TURN_SPEED * DELTA_TIME;
+        } else if weight_left > weight_right {
+            return random_steer_strength * TURN_SPEED * DELTA_TIME;
+        }
+
+        0.0
+    }
+
     fn sense(&self, idx: usize, sensor_angle_offset: f32) -> f32 {
         let particle = &self.particles[idx];
+
         let sensor_angle = particle.angle + sensor_angle_offset;
         let sensor_dir = (sensor_angle.cos(), sensor_angle.sin());
         let sensor_centre = (
@@ -123,7 +144,8 @@ impl MoldController {
 
     pub fn tick(&mut self) {
         for idx in 0..self.particles.len() {
-            self.update(idx);
+            self.update_movement(idx);
+            self.particles[idx].angle += self.get_angle_correction(idx);
         }
         self.map.blur();
         self.map.fade();

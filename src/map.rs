@@ -1,4 +1,7 @@
-use crate::constants::{mold_constants::{BLUR_WINDOW_SIZE, DELTA_TIME, FADE_FACTOR}, GridType};
+use crate::constants::{
+    mold_constants::{BLUR_WINDOW_SIZE, DELTA_TIME, FADE_FACTOR},
+    GridType,
+};
 
 pub struct Map {
     width: usize,
